@@ -838,7 +838,12 @@ FuckF.taskSearch = async () => {
         FuckD.search.pc.progress = searchInfo.pcSearch[0].pointProgress
         FuckD.search.pc.max = searchInfo.pcSearch[0].pointProgressMax
         if (FuckD.bing.searchLimit > 0) {
-            const randomReduce = FuckF.getRandomNum(FuckD.bing.searchLimit + 1)
+            const reduceKey = `Config.searchLimitReduce_pc_${FuckD.bing.dateNowNum}`
+            let randomReduce = GM_getValue(reduceKey, -1)
+            if (randomReduce < 0) {
+                randomReduce = FuckF.getRandomNum(FuckD.bing.searchLimit + 1)
+                GM_setValue(reduceKey, randomReduce)
+            }
             FuckD.search.pc.max = Math.max(0, FuckD.search.pc.max - randomReduce)
         }
         pcReport = `\n💻电脑搜索：${FuckD.search.pc.progress}/${FuckD.search.pc.max}`
@@ -850,7 +855,12 @@ FuckF.taskSearch = async () => {
         FuckD.search.m.progress = searchInfo.mobileSearch[0].pointProgress
         FuckD.search.m.max = searchInfo.mobileSearch[0].pointProgressMax
         if (FuckD.bing.searchLimit > 0) {
-            const randomReduce = FuckF.getRandomNum(FuckD.bing.searchLimit + 1)
+            const reduceKey = `Config.searchLimitReduce_m_${FuckD.bing.dateNowNum}`
+            let randomReduce = GM_getValue(reduceKey, -1)
+            if (randomReduce < 0) {
+                randomReduce = FuckF.getRandomNum(FuckD.bing.searchLimit + 1)
+                GM_setValue(reduceKey, randomReduce)
+            }
             FuckD.search.m.max = Math.max(0, FuckD.search.m.max - randomReduce)
         }
         mReport = `\n📱移动设备搜索：${FuckD.search.m.progress}/${FuckD.search.m.max}`
