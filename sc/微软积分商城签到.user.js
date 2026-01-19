@@ -50,6 +50,11 @@ Config:
         default: 30
         min: 30
         unit: ±15秒
+    searchLimit:
+        title: 搜索上限数（0=不限制，正整数=最大搜索次数减少0-N的随机值）
+        type: number
+        default: 0
+        min: 0
     api:
         title: 搜索词接口（单机模式为随机汉字组合）
         type: select
@@ -233,6 +238,7 @@ const FuckD = {
         repo: "https://github.com/geoisam/FuckScripts/",
         time: 3210,
         span: GM_getValue("Config.span", 20),
+        searchLimit: GM_getValue("Config.searchLimit", 0),
         code: 0,
         token: false,
         error: 0,
@@ -831,6 +837,10 @@ FuckF.taskSearch = async () => {
     if (searchInfo.pcSearch) {
         FuckD.search.pc.progress = searchInfo.pcSearch[0].pointProgress
         FuckD.search.pc.max = searchInfo.pcSearch[0].pointProgressMax
+        if (FuckD.bing.searchLimit > 0) {
+            const randomReduce = FuckF.getRandomNum(FuckD.bing.searchLimit + 1)
+            FuckD.search.pc.max = Math.max(0, FuckD.search.pc.max - randomReduce)
+        }
         pcReport = `\n💻电脑搜索：${FuckD.search.pc.progress}/${FuckD.search.pc.max}`
     } else {
         FuckD.search.pc.max = 0
@@ -839,6 +849,10 @@ FuckF.taskSearch = async () => {
     if (searchInfo.mobileSearch) {
         FuckD.search.m.progress = searchInfo.mobileSearch[0].pointProgress
         FuckD.search.m.max = searchInfo.mobileSearch[0].pointProgressMax
+        if (FuckD.bing.searchLimit > 0) {
+            const randomReduce = FuckF.getRandomNum(FuckD.bing.searchLimit + 1)
+            FuckD.search.m.max = Math.max(0, FuckD.search.m.max - randomReduce)
+        }
         mReport = `\n📱移动设备搜索：${FuckD.search.m.progress}/${FuckD.search.m.max}`
     } else {
         FuckD.search.m.max = 0
